@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.4.RELEASE</version>
+    </parent>
+
+    <groupId>com.github.tomschi</groupId>
+    <artifactId>spring-boot-parent-pom</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>spring-boot-parent-pom</name>
+    <url>https://github.com/Tomschi/spring-boot-parent-pom</url>
+    <inceptionYear>2019</inceptionYear>
+
+    <organization>
+        <name>Tomschi</name>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Tomschi</name>
+            <email>codingtomschi@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/Tomschi/spring-boot-parent-pom.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Tomschi/spring-boot-parent-pom.git</developerConnection>
+        <url>https://github.com/Tomschi/spring-boot-parent-pom</url>
+        <tag>v${project.version}</tag>
+    </scm>
+
+    <properties>
+        <license.licenseName>apache_v2</license.licenseName>
+
+        <!-- mojo plugins -->
+
+        <license-maven-plugin.version>1.20</license-maven-plugin.version>
+
+        <!-- other plugin versions -->
+
+        <artifactory-maven-plugin.version>2.7.0</artifactory-maven-plugin.version>
+        <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${license-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>update-project</id>
+                        <goals>
+                            <goal>update-project-license</goal>
+                        </goals>
+                        <configuration>
+                            <licenseFile>${maven.multiModuleProjectDirectory}/LICENSE.txt</licenseFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>update-file</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <configuration>
+                            <roots>
+                                <root>src/main/java</root>
+                                <root>src/test/java</root>
+                            </roots>
+                            <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://jcenter.bintray.com/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <url>https://jcenter.bintray.com/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <profiles>
+        <profile>
+            <id>travis</id>
+            <activation>
+                <property>
+                    <name>env.TRAVIS</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jfrog.buildinfo</groupId>
+                        <artifactId>artifactory-maven-plugin</artifactId>
+                        <version>${artifactory-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>build-info</id>
+                                <goals>
+                                    <goal>publish</goal>
+                                </goals>
+                                <configuration>
+                                    <buildInfo>
+                                        <agentName>Travis CI</agentName>
+                                        <buildName>${project.name}</buildName>
+                                        <buildNumber>${env.TRAVIS_BUILD_NUMBER}</buildNumber>
+                                        <buildUrl>${env.TRAVIS_BUILD_WEB_URL}</buildUrl>
+                                        <principal>${env.USER}</principal>
+                                        <vcsRevision>${env.TRAVIS_COMMIT}</vcsRevision>
+                                    </buildInfo>
+                                    <publisher>
+                                        <contextUrl>https://oss.jfrog.org/artifactory</contextUrl>
+                                        <username>${env.OSS_JFROG_USERNAME}</username>
+                                        <password>${env.OSS_JFROG_PASSWORD}</password>
+                                        <repoKey>oss-release-local</repoKey>
+                                        <snapshotRepoKey>oss-snapshot-local</snapshotRepoKey>
+                                        <publishArtifacts>true</publishArtifacts>
+                                        <publishBuildInfo>true</publishBuildInfo>
+                                    </publisher>
+                                    <licenses>
+                                        <autoDiscover>true</autoDiscover>
+                                        <!--<includePublishedArtifacts>false</includePublishedArtifacts>-->
+                                        <!--<runChecks>true</runChecks>-->
+                                        <!--<scopes>compile,runtime</scopes>-->
+                                        <!--<violationRecipients>build@organisation.com</violationRecipients>-->
+                                    </licenses>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.eluder.coveralls</groupId>
+                        <artifactId>coveralls-maven-plugin</artifactId>
+                        <version>${coveralls-maven-plugin.version}</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>default-prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>default-prepare-agent-integration</id>
+                                <goals>
+                                    <goal>prepare-agent-integration</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>default-report</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>default-report-integration</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>report-integration</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
