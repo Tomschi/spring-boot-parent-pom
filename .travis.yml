@@ -3,7 +3,7 @@ jdk: openjdk8
 
 deploy:
   provider: script
-  script: "mvn install -B"
+  script: "mvn deploy -B"
   skip_cleanup: true
   on:
     branch: master
