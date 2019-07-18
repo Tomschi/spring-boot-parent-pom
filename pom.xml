@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.4.RELEASE</version>
+        <version>2.1.6.RELEASE</version>
     </parent>
 
     <groupId>com.github.tomschi</groupId>
@@ -50,7 +50,7 @@
 
         <!-- mojo plugins -->
 
-        <license-maven-plugin.version>1.20</license-maven-plugin.version>
+        <license-maven-plugin.version>2.0.0</license-maven-plugin.version>
 
         <!-- other plugin versions -->
 
