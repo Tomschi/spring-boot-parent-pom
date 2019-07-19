@@ -16,7 +16,8 @@
                     </snapshots>
                 </repository>
                 <repository>
-                    <id>oss-jfrog-snapshots</id>
+                    <id>snapshots</id>
+                    <name>oss-jfrog-snapshots</name>
                     <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
                     <releases>
                         <enabled>false</enabled>
@@ -36,7 +37,8 @@
                     </snapshots>
                 </pluginRepository>
                 <pluginRepository>
-                    <id>oss-jfrog-plugins-snapshots</id>
+                    <id>snapshots</id>
+                    <name>oss-jfrog-plugins-snapshots</name>
                     <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
                     <releases>
                         <enabled>false</enabled>
